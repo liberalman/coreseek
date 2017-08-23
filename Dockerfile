@@ -2,7 +2,6 @@ FROM alpine:latest
 MAINTAINER liberalman liberalman@github.com
 
 #RUN apk --update --no-cache add runit
-RUN apk --update add runit
 
 COPY coreseek /usr/local/coreseek
 WORKDIR /usr/local/coreseek
@@ -10,8 +9,7 @@ ENV PATH=${PATH}:/usr/local/coreseek/bin
 
 ENV SPHINX_CONF=/usr/local/coreseek/etc/sphinx.conf
 COPY sphinx.conf ${SPHINX_CONF}
-ADD sphinx.service /etc/service/sphinx/run
-RUN chmod +x /etc/service/sphinx/run
+COPY entrypoint.sh /sbin/entrypoint.sh
 
 COPY libmysqlclient.so.18.0.0 /lib64/libmysqlclient.so.18
 COPY libpthread.so.0 /lib64/libpthread.so.0
@@ -36,9 +34,10 @@ COPY libresolv.so.2 /lib64/libresolv.so.2
 COPY libselinux.so.1 /lib64/libselinux.so.1
 COPY libpcre.so.1 /lib64/libpcre.so.1
 
-RUN ln -sf /dev/stdout /usr/local/coreseek/var/log/searchd.log \
+
+RUN chmod 755 /sbin/entrypoint.sh \
+    && ln -sf /dev/stdout /usr/local/coreseek/var/log/searchd.log \
     && ln -sf /dev/stdout /usr/local/coreseek/var/log/query.log
 
 EXPOSE 9312 9306
-CMD ["runsvdir", "/etc/service"]
-
+ENTRYPOINT ["/sbin/entrypoint.sh"]

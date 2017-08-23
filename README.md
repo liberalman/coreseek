@@ -11,6 +11,6 @@ docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr
 
 docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr/local/coreseek/var/log/ -e "SPHINX_MODE=indexing" --rm liberalman/coreseek
 
-indexer --config /etc/sphinx/sphinx.conf --all --rotate
+indexer --config /usr/local/coreseek/etc/sphinx.conf --all --rotate
 
 

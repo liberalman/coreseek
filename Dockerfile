@@ -1,8 +1,6 @@
 FROM alpine:latest
 MAINTAINER liberalman liberalman@github.com
 
-#RUN apk --update --no-cache add runit
-
 COPY coreseek /usr/local/coreseek
 WORKDIR /usr/local/coreseek
 ENV PATH=${PATH}:/usr/local/coreseek/bin

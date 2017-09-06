@@ -2,9 +2,10 @@ FROM alpine:latest
 MAINTAINER liberalman liberalman@github.com
 
 COPY coreseek /usr/local/coreseek
-COPY mmseg3 /usr/local/mmseg3
+COPY mmseg /usr/local/mmseg
 WORKDIR /usr/local/coreseek
-ENV PATH=${PATH}:/usr/local/coreseek/bin
+ENV PATH=${PATH}:/usr/local/coreseek/bin:/usr/local/mmseg/bin
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/mmseg/lib
 
 ENV SPHINX_CONF=/usr/local/coreseek/etc/sphinx.conf
 COPY sphinx.conf ${SPHINX_CONF}

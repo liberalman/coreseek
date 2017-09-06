@@ -6,9 +6,8 @@ SPHINX_MODE=${SPHINX_MODE:-}
 
 if [[ ${SPHINX_MODE} == indexing ]]; then
  indexer --config ${SPHINX_CONF} --all --rotate
-fi
-
-#else
+ #indexer --config ${SPHINX_CONF} --merge test1 delta --rotate
+else
   # allow arguments to be passed to Sphinx search
   if [[ ${1:0:1} = '-' ]]; then
     EXTRA_OPTS="$@"
@@ -22,5 +21,5 @@ fi
   else
     exec "$@"
   fi
-#fi
+fi
 

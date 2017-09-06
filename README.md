@@ -1,6 +1,8 @@
 
 #### 首先在本机上编译coreseek
+
 | 软件 | 版本 |
+| --- | --- |
 | centos | 3.10.0-327.36.3.el7.x86_64 |
 | gcc | version 4.8.5 20150623 (Red Hat 4.8.5-11) (GCC)  |
 | coreseek | coreseek-4.1-beta |
@@ -80,7 +82,7 @@ docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr
 
 如果只做全量或增量索引，而不启动coreseek进程，执行完之后就退出删除docker的，用下面的命令
 ```
-docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr/local/coreseek/var/log/ -e "SPHINX_MODE=indexing" --rm liberalman/coreseek
+docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr/local/coreseek/var/log/ -v /usr/local/tmp/coreseek/sphinx-index.conf:/usr/local/coreseek/etc/sphinx.conf -e "SPHINX_MODE=indexing" --rm liberalman/coreseek
 ```
 
 

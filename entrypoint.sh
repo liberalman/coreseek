@@ -6,7 +6,9 @@ SPHINX_MODE=${SPHINX_MODE:-}
 
 if [[ ${SPHINX_MODE} == indexing ]]; then
  indexer --config ${SPHINX_CONF} --all --rotate
-else
+fi
+
+#else
   # allow arguments to be passed to Sphinx search
   if [[ ${1:0:1} = '-' ]]; then
     EXTRA_OPTS="$@"
@@ -20,5 +22,5 @@ else
   else
     exec "$@"
   fi
-fi
+#fi
 

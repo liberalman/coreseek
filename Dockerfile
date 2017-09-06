@@ -2,6 +2,7 @@ FROM alpine:latest
 MAINTAINER liberalman liberalman@github.com
 
 COPY coreseek /usr/local/coreseek
+COPY mmseg3 /usr/local/mmseg3
 WORKDIR /usr/local/coreseek
 ENV PATH=${PATH}:/usr/local/coreseek/bin
 

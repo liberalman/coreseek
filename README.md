@@ -1,16 +1,67 @@
 
 #### 首先在本机上编译coreseek
-环境：centos 3.10.0-327.36.3.el7.x86_64
-gcc version 4.8.5 20150623 (Red Hat 4.8.5-11) (GCC) 
-版本：coreseek-4.1-beta
+| 软件 | 版本 |
+| centos | 3.10.0-327.36.3.el7.x86_64 |
+| gcc | version 4.8.5 20150623 (Red Hat 4.8.5-11) (GCC)  |
+| coreseek | coreseek-4.1-beta |
 
-下载，解压，进入coreseek-4.1-beta
+安装必须的依赖，不安装这些编译无法通过
+```
+yum install make gcc g++ gcc-c++ libtool autoconf automake imake mysql-devel libxml2-devel expat-devel
+```
+如果是ubuntu等使用apt-get命令的
+```
+apt-get install make gcc g++ automake libtool mysql-client libmysqlclient-dev libxml2-dev libexpat1-dev
+```
+
+
+下载coreseek-4.1-beta.tar.gz，解压，进入coreseek-4.1-beta
+
+安装mmseg分词，这个是中文分词的插件
 
 ```
+cd coreseek-4.1-beta/mmseg-3.2.14/
+./bootstrap
+./configure --prefix=/usr/local/mmseg3    #配置安装位置
+make && make install
+#编译、安装 mmseg-3.2.14
+```
+
+
+```
+cd coreseek-4.1-beta/csft-4.1
+sh buildconf.sh
 ./configure --prefix=/usr/local/coreseek  --without-unixodbc --with-mmseg --with-mmseg-includes=/usr/local/mmseg3/include/mmseg/ --with-mmseg-libs=/usr/local/mmseg3/lib/ --with-mysql
 make
 make install
 ```
+
+> 注意:执行上一步的 sh buildconf.sh 可能会遇到问题，没生成configure，要
+```
+csft-4.1/buildconf.sh
+查找
+&& aclocal
+后加上
+&& automake --add-missing
+csft-4.1/configure.ac
+查找
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+改为
+AM_INIT_AUTOMAKE([-Wall foreign])
+查找
+AC_PROG_RANLIB
+后面加上
+AM_PROG_AR
+csft-4.1/src/sphinxexpr.cpp
+替换所有
+T val = ExprEval ( this->m_pArg, tMatch );
+为
+T val = this->ExprEval ( this->m_pArg, tMatch );
+```
+
+这样就能生成configure了，有人说把automake版本降低为1.11，就可以了，没试。
+
+
 #### 制作docker镜像
 上一步生成的编译结果在 /usr/local/coreseek ，于是我进入到/usr/local/下
 

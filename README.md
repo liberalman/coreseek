@@ -74,6 +74,12 @@ T val = this->ExprEval ( this->m_pArg, tMatch );
 docker build -t liberalman/coreseek .
 ```
 
+```
+mkdir /var/coreseek/
+mkdir /var/coreseek/log
+mkdir /var/coreseek/data
+```
+
 
 要以终端的形式登录liberalman/coreseek镜像，执行完退出删除镜像的，用下面的命令
 ```

@@ -88,9 +88,9 @@ docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr
 
 如果只做全量或增量索引，而不启动coreseek进程，执行完之后就退出删除docker的，用下面的命令
 ```
-docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/log/:/usr/local/coreseek/var/log/ -v /usr/local/tmp/coreseek/sphinx-index.conf:/usr/local/coreseek/etc/sphinx.conf -e "SPHINX_MODE=indexing" --rm liberalman/coreseek
+docker run -v /var/coreseek/:/usr/local/coreseek/var/ -v /var/coreseek/data/:/usr/local/coreseek/var/data/  -v /var/coreseek/log/:/usr/local/coreseek/var/log/ -v /usr/local/tmp/coreseek/sphinx-index.conf:/usr/local/coreseek/etc/sphinx.conf -e "SPHINX_MODE=indexing" --rm liberalman/coreseek
 ```
-
+注意权限问题，必须-v将coreseek/var、coreseek/var/log、coreseek/var/data全都映射到宿主机上才能做索引成功，否则做的索引没权限写。报WARNING: indices NOT rotated.错误
 
 #### coreseek命令参考
 ##### 做全量索引

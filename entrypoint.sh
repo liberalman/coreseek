@@ -9,11 +9,12 @@ mysql_ip=`ping mysql -c1 | grep PING | awk '{ print $3 }'|sed 's/[():]//g'`
 # set ip to config
 sed -i "s/sql_host.*/sql_host        = $mysql_ip /g" ${SPHINX_CONF}
 
-if [[ ${SPHINX_MODE} == indexing ]]; then
- indexer --config ${SPHINX_CONF} --all --rotate
-elif [[ ${SPHINX_MODE} == merge ]]; then
- indexer --config ${SPHINX_CONF} --merge test1 delta --rotate
-else
+indexer --config ${SPHINX_CONF} test1 --rotate >> ${SPHINX_DIR}/var/log/test1.log
+#if [[ ${SPHINX_MODE} == indexing ]]; then
+# indexer --config ${SPHINX_CONF} --all --rotate >> ${SPHINX_DIR}/var/log/test1.log 2>1&
+#elif [[ ${SPHINX_MODE} == merge ]]; then
+# indexer --config ${SPHINX_CONF} --merge test1 delta --rotate >> ${SPHINX_DIR}/var/log/test1.log 2>1&
+#else
   # allow arguments to be passed to Sphinx search
   if [[ ${1:0:1} = '-' ]]; then
     EXTRA_OPTS="$@"
@@ -27,5 +28,11 @@ else
   else
     exec "$@"
   fi
-fi
+
+  crond=`ps -ef|grep crond`
+  if [ "" != $crond ];then
+      nohup crond &
+  fi
+#fi
+
 

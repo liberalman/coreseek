@@ -1,15 +1,18 @@
 FROM alpine:latest
 MAINTAINER liberalman liberalman@github.com
 
+ENV SPHINX_DIR=/usr/local/coreseek
+ENV PATH=${PATH}:${SPHINX_DIR}/bin:/usr/local/mmseg/bin
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/mmseg/lib
+ENV SPHINX_CONF=${SPHINX_DIR}/etc/sphinx.conf
+WORKDIR ${SPHINX_DIR}
+
+COPY add_cron /root/
 COPY coreseek /usr/local/coreseek
 COPY mmseg /usr/local/mmseg
-WORKDIR /usr/local/coreseek
-ENV PATH=${PATH}:/usr/local/coreseek/bin:/usr/local/mmseg/bin
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/mmseg/lib
-
-ENV SPHINX_CONF=/usr/local/coreseek/etc/sphinx.conf
 COPY sphinx.conf ${SPHINX_CONF}
 COPY entrypoint.sh /sbin/entrypoint.sh
+COPY build_index.sh /sbin/build_index.sh
 
 COPY libmysqlclient.so.18.0.0 /lib64/libmysqlclient.so.18
 COPY libpthread.so.0 /lib64/libpthread.so.0
@@ -36,8 +39,10 @@ COPY libpcre.so.1 /lib64/libpcre.so.1
 
 
 RUN chmod 755 /sbin/entrypoint.sh \
+    && chmod 755 /sbin/build_index.sh \
     && ln -sf /dev/stdout /usr/local/coreseek/var/log/searchd.log \
     && ln -sf /dev/stdout /usr/local/coreseek/var/log/query.log
+RUN cat /root/add_cron >> /var/spool/cron/crontabs/root
 
 EXPOSE 9312 9306
 ENTRYPOINT ["/sbin/entrypoint.sh"]

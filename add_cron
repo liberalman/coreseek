@@ -1,3 +1,3 @@
-0 5 * * * root /sbin/build_index.sh main
-5 * * * * root /sbin/build_index.sh delta
+0 5 * * * /sbin/build_index.sh main
+5 * * * * /sbin/build_index.sh delta
 

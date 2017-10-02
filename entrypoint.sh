@@ -9,6 +9,8 @@ mysql_ip=`ping mysql -c1 | grep PING | awk '{ print $3 }'|sed 's/[():]//g'`
 # set ip to config
 sed -i "s/sql_host.*/sql_host        = $mysql_ip /g" ${SPHINX_CONF}
 
+crond
+
 indexer --config ${SPHINX_CONF} test1 --rotate >> ${SPHINX_DIR}/var/log/test1.log
 #if [[ ${SPHINX_MODE} == indexing ]]; then
 # indexer --config ${SPHINX_CONF} --all --rotate >> ${SPHINX_DIR}/var/log/test1.log 2>1&
@@ -29,10 +31,6 @@ indexer --config ${SPHINX_CONF} test1 --rotate >> ${SPHINX_DIR}/var/log/test1.lo
     exec "$@"
   fi
 
-  crond=`ps -ef|grep crond`
-  if [ "" != $crond ];then
-      nohup crond &
-  fi
 #fi
 
 
